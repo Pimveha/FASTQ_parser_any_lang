@@ -1,14 +1,33 @@
 #!/bin/bash
 
-input_file="../example.fastq"
+# extremely slow fastq parser :D
+# example usage:
+#  ./fastq_parser.sh -f input.fastq -h -s
+#  ./fastq_parser.sh -f input.fastq -q
 
-while getopts "hs" opt; do
+# -f optional input file
+# -h only shows headers
+# -s only shows sequences
+# -hs shows both headers and sequences
+# -q shows the average quality score (very slow)
+
+
+input_file="../example.fastq"
+# input_file="../fake.fastq"
+
+while getopts "f:hsq" opt; do
     case $opt in
+        f)
+            input_file="$OPTARG"
+            ;;
         h)
             output_header=true
             ;;
         s)
             output_sequence=true
+            ;;
+        q)
+            output_average_qual=true
             ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2
@@ -16,6 +35,13 @@ while getopts "hs" opt; do
             ;;
     esac
 done
+
+
+if [ ! -f "$input_file" ]; then
+    echo "Input file not found: $input_file" >&2
+    exit 1
+fi
+
 
 while IFS= read -r line
 do
@@ -45,10 +71,27 @@ do
             echo "$sequence"
 
 
+        elif [ "$output_average_qual" = true ]
+        then
+            qual=""
+            for ((i=0;i< ${#quality};i++)); do
+                qchar=${quality:i:1}
+                qual+=$(printf '+%d-33' "'$qchar")
+                # echo $(printf '%d-33 + ' "'$qchar")
+                # echo $qchar
+            done
+
+            echo ">$header"
+            echo "$sequence"
+            echo "(${qual:1})/${#quality}" | bc -l
+            # echo "${#quality}" | bc
+
+
         else
             echo "Header: $header"
             echo "Sequence: $sequence"
             echo "Quality: $quality"
+            echo ""
         fi
     fi
 done < "$input_file"
