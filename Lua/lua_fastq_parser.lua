@@ -1,8 +1,18 @@
 local open = io.open
 -- local inspect = require('inspect')
 
+function average_qual(quality)
+    local qual_total = 0
+    for char in quality:gmatch"." do
+        qual_total = string.byte(char) + qual_total
+      end
+    return qual_total/#quality
+  end
+
+
 function FastqRecord(name, sequence, quality)
-    return { name = name, sequence = sequence, quality = quality }
+    local average_qual = average_qual(quality)
+    return { name = name, sequence = sequence, quality = quality, average_qual = average_qual}
   end
 
 function read_file(path)
@@ -16,12 +26,7 @@ function read_file(path)
     return lines
   end
 
--- array = { FastqRecord("a", "ATGC", "ABCD"), FastqRecord("b", "tTGC", "QBCD") }
-
--- print(array[1].name)
-
 lines = read_file('../example.fastq')
--- print(lines[2])
 
 print(#lines)
 
@@ -36,5 +41,14 @@ for i = 1, #lines, 4 do
   end
 
 
--- print(FastqTable)
+
+
+-- print(FastqTable.1.name)
 -- print(inspect(FastqTable))
+
+for i, t in ipairs(FastqTable) do
+    print("\n\n",i)
+    print("name:",t.name)
+    print("sequence:",t.sequence)
+    print("average qual:", t.average_qual)
+  end
