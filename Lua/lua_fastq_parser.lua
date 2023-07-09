@@ -40,15 +40,12 @@ for i = 1, #lines, 4 do
     FastqTable[#FastqTable+1] = FastqRecord(name, sequence, quality)
   end
 
-
-
-
 -- print(FastqTable.1.name)
 -- print(inspect(FastqTable))
 
-for i, t in ipairs(FastqTable) do
-    print("\n\n",i)
-    print("name:",t.name)
-    print("sequence:",t.sequence)
-    print("average qual:", t.average_qual)
-  end
+-- for i, t in ipairs(FastqTable) do
+--     print("\n\n",i)
+--     print("name:",t.name)
+--     print("sequence:",t.sequence)
+--     print("average qual:", t.average_qual)
+--   end
