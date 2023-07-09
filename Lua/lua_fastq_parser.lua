@@ -40,7 +40,7 @@ for i = 1, #lines, 4 do
     FastqTable[#FastqTable+1] = FastqRecord(name, sequence, quality)
   end
 
--- print(FastqTable.1.name)
+print(FastqTable)
 -- print(inspect(FastqTable))
 
 -- for i, t in ipairs(FastqTable) do
@@ -49,3 +49,14 @@ for i = 1, #lines, 4 do
 --     print("sequence:",t.sequence)
 --     print("average qual:", t.average_qual)
 --   end
+
+-- sort based on average quality
+table.sort(FastqTable, function (q1, q2) return q1.average_qual < q2.average_qual end )
+
+for i, val in ipairs(FastqTable) do
+    print("\n\n\n")
+    print(val.name, "\n", val.sequence, "\n", val.average_qual)
+  end
+
+
+
