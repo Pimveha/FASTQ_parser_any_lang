@@ -9,10 +9,22 @@ function average_qual(quality)
     return qual_total/#quality
   end
 
+function GC_percentage(sequence)
+    local _, G_count = string.gsub(sequence, "G", "")
+    local _, C_count = string.gsub(sequence, "C", "")
+    -- local _, GC_count = string.gsub(sequence, "/[GCgc]", "")
+    return (G_count + C_count)/#sequence*100
+  end
+
 
 function FastqRecord(name, sequence, quality)
     local average_qual = average_qual(quality)
-    return { name = name, sequence = sequence, quality = quality, average_qual = average_qual}
+    local GC_percentage = GC_percentage(sequence)
+    return {name = name,
+            sequence = sequence,
+            quality = quality,
+            average_qual = average_qual,
+            GC_percentage = GC_percentage}
   end
 
 function read_file(path)
@@ -55,7 +67,10 @@ table.sort(FastqTable, function (q1, q2) return q1.average_qual < q2.average_qua
 
 for i, val in ipairs(FastqTable) do
     print("\n\n\n")
-    print(val.name, "\n", val.sequence, "\n", val.average_qual)
+    print(val.name, "\n",
+    val.sequence, "\n",
+    val.average_qual, "\n",
+    val.GC_percentage)
   end
 
 
