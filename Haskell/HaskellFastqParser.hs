@@ -1,12 +1,15 @@
 import System.IO
+-- I/O functionaliteit
 import Data.Maybe (mapMaybe)
+-- https://youtu.be/N9RUqGYuGfw
 
 data FastqRecord = FastqRecord
     { header :: String
     , sequence :: String
     , quality :: String
-    } deriving Show
+    } deriving Show -- pretty-printing
 
+-- 4 regels van de fastqrecord
 parseFastqRecord :: [String] -> Maybe FastqRecord
 parseFastqRecord (h : s : _ : q : _) = Just (FastqRecord h s q)
 parseFastqRecord _ = Nothing
@@ -14,7 +17,7 @@ parseFastqRecord _ = Nothing
 parseFastqFile :: FilePath -> IO [FastqRecord]
 parseFastqFile filePath = do
     contents <- readFile filePath
-    let linesList = lines contents
+    let linesList = lines contents -- list of lines
     let records = splitEvery 4 linesList
     let parsedRecords = map parseFastqRecord records
     return (mapMaybe id parsedRecords)
@@ -31,11 +34,10 @@ getNthRecord records n
 
 main :: IO ()
 main = do
-    records <- parseFastqFile "./example.fastq"
-
+    records <- parseFastqFile "../example.fastq"
     -- userNum <- readLn :: IO Int
     -- let nthRecord = getNthRecord records userNum
-    let nthRecord = getNthRecord records 1
+    let nthRecord = getNthRecord records 5
     case nthRecord of
         Just record -> print record
         Nothing     -> putStrLn "Record not found"
