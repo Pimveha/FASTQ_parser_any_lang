@@ -1,4 +1,4 @@
-from json import dumps
+# from json import dumps
 
 
 class Fastq_r():
@@ -194,14 +194,14 @@ class Fastq_r():
         return avg_q_list
 
 
-def read_file(name):
-    with open(f"{name}.fastq", "r") as f:
+def read_file(file_name):
+    with open(file_name, "r", encoding="utf-8") as f:
         r_f = f.read()
     return r_f
 
 
 def main():
-    fasta_file = read_file("../../example")
+    fasta_file = read_file("../../example.fastq")
     seq = Fastq_r(fasta_file)
     print(seq.get_read_quality())
 
