@@ -4,17 +4,7 @@ from json import dumps
 class Fastq_r():
     def __init__(self, fastq):
         self.fastq = fastq
-        # self.qlt = '''!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~'''
-        # python string ascii index
-        # for i in range(len(qlt)):
-        # print(ord(qlt[i])) 33-126
-
         self.fastq_dict = {}
-        # self.qlt_score_list = []
-
-        # ik weet niet of dit een logische manier is om je klasse te formatten:
-
-        # self.fastq_dict =
 
     def get_raw_fastq(self):
         return self.fastq
@@ -23,12 +13,8 @@ class Fastq_r():
         pros_fastq = self.fastq.split("\n")[:-1]
         return pros_fastq[1::4]
 
-    # def get_qlt(self):
-    # 	return self.qlt
-
     def get_GC_ratio(self):
-        pros_fastq = self.fastq.split("\n")[:-1]
-        seq_only_cont_string = ''.join(pros_fastq[1::4])
+        seq_only_cont_string = self.get_seq()
         cg_only_string = seq_only_cont_string.replace("T", "").replace("A", "")
         print(f"{len(cg_only_string)} out of the {len(seq_only_cont_string)} bases contain C/G\nThis is around {len(cg_only_string)/len(seq_only_cont_string):.3%}")
         return len(cg_only_string)/len(seq_only_cont_string)
@@ -37,12 +23,13 @@ class Fastq_r():
         pros_fastq = self.fastq.split("\n")[:-1]
         qlt_seq_list = pros_fastq[3::4]
         qlt_score_list = []
-        for i in range(len(qlt_seq_list)):
-            temp_seq_qlt_list = []
-            temp_seq_qlt_list = [
-                ord(qlt_seq_list[i][j])-33 for j in range(len(qlt_seq_list[i]))]
+        for qual in qlt_seq_list:
+            # temp_seq_qlt_list = []
+            seq_qual = [ord(char) - 33 for char in qual]
+            # temp_seq_qlt_list = [
+            #     ord(qlt_seq_list[i][j])-33 for j in range(len(qlt_seq_list[i]))]
             # print(temp_seq_qlt_list)
-            qlt_score_list.append(temp_seq_qlt_list)
+            qlt_score_list.append(seq_qual)
             # qlt_seq_list[i]
         return qlt_score_list
 
@@ -173,12 +160,6 @@ class Fastq_r():
             temp_len_list = [j / len(qlt_score_list[i])
                              for j in range(len(qlt_score_list[i]))]
             norm_len_list += temp_len_list
-            # norm_len_list.append(temp_len_list)
-
-        # plt.hist(qlt_score_list[-4], bins = 100)
-        # plt.ylabel('Frequency')
-        # plt.show()
-        # print(norm_len_list)
 
         plt.scatter(norm_len_list, long_qlt_score, s=1)
         plt.show()
@@ -209,11 +190,8 @@ class Fastq_r():
     def avg_q_per_read(self):
         avg_q_list = []
         for q in self.fastq.split("\n")[:-1][3::4]:
-            avg_q_list.append(sum([ord(i)-64 for i in q])/len(q))
+            avg_q_list.append(sum([ord(i)-33 for i in q])/len(q))
         return avg_q_list
-
-    # def get_seq(self):
-        # qlt = ''' !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~'''
 
 
 def read_file(name):
@@ -223,44 +201,11 @@ def read_file(name):
 
 
 def main():
-    # fasta_file = read_file("small")
-    fasta_file = read_file("FAP49580_pass_barcode54_c50aa34c_0")
+    fasta_file = read_file("../../example")
     seq = Fastq_r(fasta_file)
-    # print(seq.get_qlt())
-    # print(seq.get_raw_fastq())
-    # print(seq.get_seq())
-    seq.get_size_graph()
-    print("\naverage lengthe of sequence:")
-    print(seq.get_mean_sequence_length())
-    # seq.gen_name_read_qlt_dict()
-    # dictio = seq.get_name_read_qlt_dict()
-    # pretty = dumps(dictio, indent=4)
+    print(seq.get_read_quality())
 
-    # print(pretty)
-    # print(seq.get_read_quality())
-
-    # print(seq.get_avg_qlt_score()) # 22.270785053678754
-    # print()
-    # decent_reads = seq.get_good_reads(22)
-    # print()
-    # good_reads = seq.get_good_reads(25)
-    # print()
-    # print(seq.get_GC_ratio())
-
-    # # quality score distribution
-    # # seq.get_quality_score_distr_graph()
-
-    # print(seq.get_avg_qlt_score_cut_off(100, 100)) # 100 = 22.293426312887856
-    # seq.get_quality_score_distr_graph() # takes long
-
-    # # print(seq.get_raw_qlt())
-    # # seq.get_quality_score_distr()
-    # seq.get_qlt_hist()
     print(seq.avg_q_per_read())
-
-    # print(seq.get_good_reads(22))
-
-    # is het mogelijk om alleen de self te gebruiken als die al eerder is aangeroepen?
 
 
 if __name__ == '__main__':
