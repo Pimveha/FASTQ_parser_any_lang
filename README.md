@@ -17,3 +17,4 @@ At the moment, the following languages have been included in this repository:
 - Haskell
 - Java
 - Julia
+- R
