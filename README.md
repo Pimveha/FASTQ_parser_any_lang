@@ -14,5 +14,6 @@ At the moment, the following languages have been included in this repository:
 - Lua
 - AWK
 - Bash
-- Haskell (incomplete)
+- Haskell
 - Java
+- Julia
