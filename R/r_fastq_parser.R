@@ -1,10 +1,9 @@
 lines <- readLines("../example.fastq")
 
-content_list = c("name", "sequence", "ignore", "quality")
+content_list <- c("name", "sequence", "ignore", "quality")
 # length(rep(content_list, times = length(lines)/4))
 # length(lines)
 # length(rep(1:(length(lines)/4), each = 4))
-?seq
 
 
 fastq_df <- data.frame(fastq_content = lines,
@@ -18,10 +17,3 @@ if (startsWith(fastq_df[fastq_df$id == length(lines)/4 & fastq_df$id_content == 
 }else {
   print("parsing failed")
 }
-
-fastq_df[fastq_df$id == 1,]
-fastq_df[fastq_df$id_content == "name",]
-
-# rownames(fastq_df) <- c()
-  
-# paste0(rep(mynames,length.out=6587),rep(1:366,each=18,length.out=6587))
