@@ -1,0 +1,1 @@
+cat example.fastq | awk '{ print length($0) }' | sort -h | uniq | tail -1
