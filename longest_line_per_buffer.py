@@ -11,17 +11,20 @@ def longest_buffers(filename = "example.fastq"):
 
             elif i % 4 == 1:
                 # print(line)
+                # trimmed_line = line[10:-10]
+                # print(trimmed_line)
                 if len(line) > bases:
                     bases = len(line)
             elif i % 4 == 2:
-                # print(line)
+            #     # print(line)
+            #     ...
                 if len(line) > idkman:
                     idkman = len(line)
             elif i % 4 == 3:
                 # print(line)
                 if len(line) > qual:
                     qual = len(line)
-    # print(f"longest header line:\t{header}\nlongest base line:\t{bases}\nlongest idk line:\t{idkman}\nlongest quality line:\t{qual}")
+    print(f"longest header line:\t{header}\nlongest base line:\t{bases}\nlongest idk line:\t{idkman}\nlongest quality line:\t{qual}")
         
                 
 longest_buffers()
@@ -41,3 +44,8 @@ longest_buffers()
 # real    0m4.323s
 # user    0m0.692s
 # sys     0m0.544s
+
+# for i in {1..10}; do p3 longest_line_per_buffer.py; done with simple
+# real    0m5.423s
+# user    0m0.726s
+# sys     0m0.586s

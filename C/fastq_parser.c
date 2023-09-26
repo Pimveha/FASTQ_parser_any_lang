@@ -23,14 +23,15 @@ typedef struct
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc != 3)
     {
-        fprintf(stderr, "Usage: %s <fastq_file>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <fastq_file> <trim_length>\n", argv[0]);
         return 1;
     }
 
     FILE *fptr;
 
+    int trim_length = atoi(argv[2]);
     char buffer[512];
     FastQRecord record;
     int line_count = 0;
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
             else if (line_count % 4 == 2)
             {
                 snprintf(record.sequence, sizeof(record.sequence), "%s", buffer);
+                static_slicer(record.sequence, trim_length);
             }
             else if (line_count % 4 == 0)
             {
@@ -81,3 +83,8 @@ int main(int argc, char *argv[])
 // real    0m2.754s
 // user    0m0.153s
 // sys     0m0.278s
+
+// time for i in {1..10}; do ./a.out ../example.fastq 10; done simple trimmer
+// real    0m6.085s
+// user    0m0.202s
+// sys     0m0.432s
