@@ -18,3 +18,8 @@ At the moment, the following languages have been included in this repository:
 - Java
 - Julia
 - R
+
+languages I plan to add:
+- Scala
+- APL
+- Lisp
